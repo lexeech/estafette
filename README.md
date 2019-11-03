@@ -1,4 +1,4 @@
-# Lexeech
+# Estafette
 
 ## Installation
 
