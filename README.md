@@ -5,13 +5,13 @@
 With [`npm`](https://npmjs.org/):
 
 ```
-npm install lexeech
+npm install estafette
 ```
 
 With [`yarn`](https://yarnpkg.com/):
 
 ```
-yarn add lexeech
+yarn add estafette
 ```
 
 ## Usage
