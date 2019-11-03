@@ -1,0 +1,39 @@
+{
+  "name": "estafette",
+  "version": "0.0.1",
+  "description": "Estafette is a react library",
+  "main": "index.js",
+  "scripts": {
+    "test": "test",
+    "prepublish": "rollup -c -m"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/lexeech/estafette.git"
+  },
+  "keywords": [
+    "react",
+    "library"
+  ],
+  "author": "Vladimir \"lexeech\" Josan <iaskivsky@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lexeech/estafette/issues"
+  },
+  "homepage": "https://github.com/lexeech/estafette#readme",
+  "files": [
+    "index.d.ts",
+    "index.js",
+    "index.js.map",
+    "package.json",
+    "README.md"
+  ],
+  "peerDependencies": {
+    "react": ">=16.8.0-alpha.0"
+  },
+  "devDependencies": {
+    "rollup": "^0.66.6",
+    "rollup-plugin-commonjs": "^9.2.0",
+    "rollup-plugin-node-resolve": "^3.4.0"
+  }
+}
