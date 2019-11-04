@@ -1,30 +1,28 @@
 import { useState } from 'react';
 
-const flat = (flatten = {}, dataToFlat = {}) => {
+const flat = (flatten, dataToFlat = {}) => {
   let newDataToFlat = { ...dataToFlat };
 
-  if (flatten) {
-    if (typeof flatten === 'string' && newDataToFlat[flatten]) {
-      delete newDataToFlat[flatten];
+  if (typeof flatten === 'string' && newDataToFlat[flatten]) {
+    delete newDataToFlat[flatten];
 
-      newDataToFlat = {
-        ...newDataToFlat,
-        ...dataToFlat[flatten],
-      };
-    }
+    newDataToFlat = {
+      ...newDataToFlat,
+      ...dataToFlat[flatten],
+    };
+  }
 
-    if (Array.isArray(flatten)) {
-      flatten.forEach(key => {
-        if (newDataToFlat[key]) {
-          delete newDataToFlat[key];
+  if (Array.isArray(flatten)) {
+    flatten.forEach(key => {
+      if (newDataToFlat[key]) {
+        delete newDataToFlat[key];
 
-          newDataToFlat = {
-            ...newDataToFlat,
-            ...dataToFlat[key],
-          };
-        }
-      });
-    }
+        newDataToFlat = {
+          ...newDataToFlat,
+          ...dataToFlat[key],
+        };
+      }
+    });
   }
 
   return newDataToFlat;
@@ -43,11 +41,27 @@ export const useRequest = (options = {}) => {
     try {
       const { data = options.data || [] } = await fn;
 
-      setData(flat(flatten.data, data));
+      if (flatten.data) {
+        const flattenedData = flat(flatten.data, data);
+
+        setData(flattenedData);
+
+        return flattenedData;
+      }
+
+      setData(data);
 
       return data;
     } catch ({ response = {} }) {
-      setErrors(flat(flatten.errors, data));
+      if (flatten.errors) {
+        const flattenedResponse = flat(flatten.errors, response);
+
+        setData(flattenedResponse);
+
+        return flattenedResponse;
+      }
+
+      setErrors(response);
 
       return response;
     } finally {
