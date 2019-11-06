@@ -1,66 +1,34 @@
 import { useState } from 'react';
 
-const flat = (flatten, dataToFlat = {}) => {
-  let newDataToFlat = { ...dataToFlat };
-
-  if (typeof flatten === 'string' && newDataToFlat[flatten]) {
-    delete newDataToFlat[flatten];
-
-    newDataToFlat = {
-      ...newDataToFlat,
-      ...dataToFlat[flatten],
-    };
-  }
-
-  if (Array.isArray(flatten)) {
-    flatten.forEach(key => {
-      if (newDataToFlat[key]) {
-        delete newDataToFlat[key];
-
-        newDataToFlat = {
-          ...newDataToFlat,
-          ...dataToFlat[key],
-        };
-      }
-    });
-  }
-
-  return newDataToFlat;
-};
-
 export const useRequest = (options = {}) => {
   const [data, setData] = useState(options.data || []);
   const [errors, setErrors] = useState(options.errors || {});
   const [loading, setLoading] = useState(options.loading || false);
 
-  const request = async fn => {
-    const { flatten = {} } = options;
-
+  const request = async (fn, { concat } = {}) => {
     setLoading(true);
 
     try {
-      const { data = options.data || [] } = await fn;
+      const { data: response = options.data || [] } = await fn;
 
-      if (flatten.data) {
-        const flattenedData = flat(flatten.data, data);
+      if (concat) {
+        let concatedResponse = null;
 
-        setData(flattenedData);
+        if (typeof concat === 'string') {
+          concatedResponse = { ...data, [concat]: [...data[concat], ...response[concat]] };
+        } else {
+          concatedResponse = [...data, ...response];
+        }
 
-        return flattenedData;
+        setData(concatedResponse);
+
+        return concatedResponse;
       }
 
-      setData(data);
+      setData(response);
 
-      return data;
+      return response;
     } catch ({ response = {} }) {
-      if (flatten.errors) {
-        const flattenedResponse = flat(flatten.errors, response);
-
-        setData(flattenedResponse);
-
-        return flattenedResponse;
-      }
-
       setErrors(response);
 
       return response;
