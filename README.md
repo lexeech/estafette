@@ -26,4 +26,33 @@ yarn add estafette
 
 ## Usage
 
-### Comming soon ..
+### useRequest
+
+- `request` a function which executes another callback function, stores request data, switches on/off loading and catches errors
+- `data` stores all data from callback function
+- `errors` catches all errors from callback function
+- `loading` stores loading state
+
+```jsx
+import React, { useEffect } from 'react';
+import axios from 'axios';
+import { useRequest } from 'estafette';
+
+const App = () => {
+  const { request, data, loading, errors } = useRequest();
+
+  useEffect(() => {
+    request(axios.get('https://jsonplaceholder.typicode.com/todos/1'));
+  }, []);
+
+  if (loading) {
+    return <span>Loading ...</span>;
+  }
+
+  return (
+    <div>
+      <h1>Title: {data.title}</h1>
+    </div>
+  );
+};
+```
