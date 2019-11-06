@@ -32,6 +32,7 @@ export const useRequest = (options = {}) => {
       return Promise.resolve(response);
     } catch ({ response = {} }) {
       setErrors(response);
+      setLoading(false);
 
       return Promise.reject(response);
     }
