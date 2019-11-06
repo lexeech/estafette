@@ -11,6 +11,7 @@ interface RequestResponse<T> {
 }
 
 interface RequestOptions {
+  loading?: boolean;
   data?: any;
   errors?: { [key: string]: string };
 }
