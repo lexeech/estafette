@@ -11,6 +11,8 @@ export const useRequest = (options = {}) => {
     try {
       const { data: response = options.data || [] } = await fn;
 
+      setLoading(false);
+
       if (concat) {
         let concatedResponse = null;
 
@@ -22,18 +24,16 @@ export const useRequest = (options = {}) => {
 
         setData(concatedResponse);
 
-        return concatedResponse;
+        return Promise.resolve(concatedResponse);
       }
 
       setData(response);
 
-      return response;
+      return Promise.resolve(response);
     } catch ({ response = {} }) {
       setErrors(response);
 
-      return response;
-    } finally {
-      setLoading(false);
+      return Promise.reject(response);
     }
   };
 
