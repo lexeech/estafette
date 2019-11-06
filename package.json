@@ -1,7 +1,7 @@
 {
   "name": "estafette",
   "version": "0.0.6",
-  "description": "Estafette is a react library",
+  "description": "Estafette helps you write code a bit faster",
   "main": "index.js",
   "scripts": {
     "test": "test",
@@ -13,7 +13,10 @@
   },
   "keywords": [
     "react",
-    "library"
+    "library",
+    "hooks",
+    "axios",
+    "fetch"
   ],
   "author": "Vladimir \"lexeech\" Josan <iaskivsky@gmail.com>",
   "license": "MIT",
