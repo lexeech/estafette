@@ -1,6 +1,6 @@
 {
   "name": "estafette",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Estafette is a react library",
   "main": "index.js",
   "scripts": {
