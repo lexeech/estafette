@@ -31,10 +31,10 @@ export const useRequest = (options = {}) => {
 
       return Promise.resolve(response);
     } catch ({ response = {} }) {
-      setErrors(response);
+      setErrors(response.data);
       setLoading(false);
 
-      return Promise.reject(response);
+      return Promise.reject(response.data);
     }
   };
 
