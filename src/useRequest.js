@@ -6,6 +6,7 @@ export const useRequest = (options = {}) => {
   const [loading, setLoading] = useState(options.loading || false);
 
   const request = async (fn, { concat } = {}) => {
+    setErrors({});
     setLoading(true);
 
     try {
