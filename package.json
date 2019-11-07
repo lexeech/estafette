@@ -1,6 +1,6 @@
 {
   "name": "estafette",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Estafette helps you write code a bit faster",
   "main": "index.js",
   "scripts": {
