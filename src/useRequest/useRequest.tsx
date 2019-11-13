@@ -24,7 +24,7 @@ interface Params {
 }
 
 interface RequestResponse<T> {
-  request: (fn: { data: T }, params?: Params) => Promise<T>;
+  request: (fn: { data: T } | Promise<{ data: T }>, params?: Params) => Promise<T>;
   data: T;
   errors: { [key: string]: string };
   loading: boolean;
@@ -35,7 +35,7 @@ export function useRequest<T>(options?: Options): RequestResponse<T> {
   const [errors, setErrors] = useState<{ [key: string]: string }>((options && options.errors) || {});
   const [loading, setLoading] = useState<boolean>((options && options.loading) || false);
 
-  const request = async (fn: { data: T }, params?: Params): Promise<T> => {
+  const request = async (fn: { data: T } | Promise<{ data: T }>, params?: Params): Promise<T> => {
     setErrors({});
     setLoading(true);
 
