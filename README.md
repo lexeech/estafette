@@ -1,12 +1,4 @@
-# Estafette
-
-## Installation
-
-With [`npm`](https://npmjs.org/):
-
-```
-npm install estafette
-```
+# Installation
 
 With [`yarn`](https://yarnpkg.com/):
 
@@ -14,19 +6,50 @@ With [`yarn`](https://yarnpkg.com/):
 yarn add estafette
 ```
 
-## Things to do
+With [`npm`](https://npmjs.org/):
 
-- [x] useRequest HOOK
-- [x] Typescript support
-- [ ] Flowtype support
-- [ ] Documentation
-- [ ] Helpers for mutation
-- [ ] useFocusEffect HOOK
-- [ ] Testing
+```
+npm install estafette
+```
 
-## Usage
+# `useList(store, renderItem)`
 
-### useRequest
+Hook function for rendering list of data.
+Every item will be memoized and updated only when their data changes.
+
+#### Arguments
+
+1. `list` (_Array_): Data
+2. `render` (_Function_): Render function which will be called for every item in list
+
+```jsx
+<ul>
+  {useList(['a', 'b', 'c', 'd'], (item, i) => (
+    <li>
+      {i + 1}. {item}
+    </li>
+  ))}
+</ul>
+```
+
+# `useRequest(initialValues)`
+
+Hook function for fetching data.
+Every request will save data or validation errors and turn on/off loading.
+
+#### Arguments
+
+`initialValues` (_Object_): an object with initial values
+
+```jsx
+const estafette = useRequest({
+  loading: true,
+  data: { title: 'Initial title' },
+  errors: { title: 'This field is required' },
+});
+```
+
+#### Returns
 
 - `request` a function which executes another callback function, stores request data, switches on/off loading and catches errors
 - `data` stores all data from callback function
@@ -57,25 +80,14 @@ const App = () => {
 };
 ```
 
-### Initial values in useRequest
-
-- `useRequest({ loading: boolean, data: any, errors: Object })`
-
-```jsx
-const { request, data, loading, errors } = useRequest({
-  loading: true,
-  data: { title: 'Initial title' },
-});
-```
-
-### Concat data in useRequest
+# Concat data in `request(data, params)`
 
 - `request(fn: Function, { concat: boolean | string })` from `useRequest` as the second argument accepts object params with concat which can be a boolean, it means every new data from callback will concatinate with current data. Also, it can be a string in case when necessary to concatinate just some property from object in data.
 
 ```jsx
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useRequest } from 'estafette';
+import { useList, useRequest } from 'estafette';
 
 const App = () => {
   const [page, setPage] = useState(1);
@@ -90,8 +102,8 @@ const App = () => {
   return (
     <>
       <ul>
-        {data.map((item, key) => (
-          <li key={key}>{item.title}</li>
+        {useList(data, item => (
+          <li>{item.title}</li>
         ))}
       </ul>
 

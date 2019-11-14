@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { useRequest } from 'estafette';
+import { useList, useRequest } from 'estafette';
 
 const API = () => ({
   data: {
-    titles: ['Hello world'],
+    titles: ['Hello world', 'Hello'],
   },
 });
 
@@ -24,8 +24,8 @@ export const App: React.FC = () => {
     <div>
       <h1>Title:</h1>
 
-      {data.titles.map(title => (
-        <p key={title}>{title}</p>
+      {useList(['a', 'b', 'c', 'd'], item => (
+        <p>{item}</p>
       ))}
 
       <div>
