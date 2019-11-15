@@ -31,7 +31,7 @@ export default {
       rollupCommonJSResolveHack: true,
       clean: true,
     }),
-    copy([{ files: 'src/index.js.flow', dest: 'dist' }], { verbose: true, watch: true }),
+    copy([{ files: 'src/index.js.flow', dest: 'dist' }], { verbose: true }),
     commonjs(),
   ],
 };
