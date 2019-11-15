@@ -1,0 +1,15 @@
+// @flow strict
+import type { Node } from 'react';
+
+declare export function useList<T>(list: T[], render: (item: T, index: number) => Node): Node;
+
+declare export function useRequest<T>(options?: {
+  loading?: boolean,
+  data?: any,
+  errors?: any,
+}): {
+  request: (fn: { data: T } | Promise<{ data: T }>, params?: { concat?: boolean | string }) => Promise<T>,
+  data: T,
+  errors: { [key: string]: string },
+  loading: boolean,
+}<T>;

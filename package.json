@@ -3,6 +3,19 @@
   "version": "1.0.3",
   "description": "Estafette helps you write code a bit faster",
   "author": "Vladimir \"lexeech\" Josan <iaskivsky@gmail.com>",
+  "maintainers": [
+    {
+      "name": "Vladimir Josan",
+      "email": "iaskivsky@gmail.com"
+    }
+  ],
+  "keywords": [
+    "react",
+    "functional",
+    "state",
+    "hooks",
+    "axios"
+  ],
   "license": "MIT",
   "repository": "git+ssh://git@github.com/lexeech/estafette.git",
   "main": "dist/index.js",
@@ -21,7 +34,10 @@
     "predeploy": "cd example && yarn install && yarn run build",
     "deploy": "gh-pages -d example/build"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@types/enzyme-adapter-react-16": "^1.0.5",
+    "rollup-plugin-copy-glob": "^0.3.1"
+  },
   "peerDependencies": {
     "react": ">= 16.8",
     "react-dom": ">= 16.8"
