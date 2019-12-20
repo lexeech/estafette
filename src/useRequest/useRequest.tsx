@@ -26,7 +26,7 @@ interface Params {
 interface RequestResponse<T> {
   request: (fn: { data: T } | Promise<{ data: T }>, params?: Params) => Promise<T>;
   data: T;
-  errors: { [key: string]: string };
+  errors: { [key: string]: any };
   loading: boolean;
 }
 
