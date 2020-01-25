@@ -1,6 +1,10 @@
 // @flow strict
 import type { Node } from 'react';
 
+type UseStateType<S>(
+  initialState: (() => S) | S,
+): [S, ((S => S) | S) => void];
+
 declare export function useList<T>(list: T[], render: (item: T, index: number) => Node): Node;
 
 declare export function useRequest<T>(options?: {
@@ -12,4 +16,9 @@ declare export function useRequest<T>(options?: {
   data: T,
   errors: { [key: string]: any },
   loading: boolean,
+  setData: UseStateType<any>,
+  setErrors: UseStateType<{
+    [key: string]: string | string[];
+  }>,
+  setLoading: UseStateType<boolean>,
 }<T>;

@@ -7,14 +7,18 @@ const API = () => ({
   },
 });
 
+const initialData = { titles: [] };
+
 export const App: React.FC = () => {
-  const { request, data, loading } = useRequest<{ titles: string[] }>({ data: { titles: [] } });
+  const { request, data, loading, setData } = useRequest<{ titles: string[] }>({ data: initialData });
 
   React.useEffect(() => {
     onFetch();
   }, []);
 
   const onFetch = () => request(API(), { concat: data.titles.length > 0 && 'titles' });
+
+  const onClear = () => setData(initialData);
 
   if (loading) {
     return <span>Loading ...</span>;
@@ -24,12 +28,13 @@ export const App: React.FC = () => {
     <div>
       <h1>Title:</h1>
 
-      {useList(['a', 'b', 'c', 'd'], item => (
+      {useList(data.titles, item => (
         <p>{item}</p>
       ))}
 
       <div>
         <button onClick={onFetch}>view more</button>
+        <button onClick={onClear}>clear all</button>
       </div>
     </div>
   );
