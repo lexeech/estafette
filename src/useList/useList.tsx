@@ -1,17 +1,29 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import * as React from 'react';
 
-export function useList<T>(list: T[], render: (item: T, index: number) => React.ReactNode): React.ReactNode {
-  if (!Array.isArray(list)) {
-    console.error(`useList expects an array but got ${typeof list}`);
-    return null;
-  }
+function withDisplayName<T>(name: string, Component: any): T {
+  Component.displayName = name;
+  return Component;
+}
 
-  if (typeof render !== 'function') {
-    console.error(`The second argument of useList (render function) expects a function but got ${typeof render}`);
-    return null;
-  }
+export function useList<T>(list: T[], renderItem: (item: T, index: number) => React.ReactNode) {
+  const fnRef = React.useRef(renderItem);
+  fnRef.current = renderItem;
 
-  const Item = React.memo(({ children }: { children: React.ReactNode }) => <>{children}</>);
+  const Item = React.useMemo(() => {
+    const Item = withDisplayName<T>('List.Item', ({ index }: { index: number }) => {
+      const item = list[index];
 
-  return Array.from({ length: list.length }, (_, i) => <Item key={i}>{render(list[i], i)}</Item>);
+      return fnRef.current(item, index);
+    });
+
+    return React.memo<any>(Item);
+  }, [list]);
+
+  return Array.from({ length: list.length }, (_, i) =>
+    React.createElement(Item, {
+      index: i,
+      key: i,
+    }),
+  );
 }

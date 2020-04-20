@@ -20,17 +20,23 @@ export const App: React.FC = () => {
 
   const onClear = () => setData(initialData);
 
-  if (loading) {
-    return <span>Loading ...</span>;
-  }
+  // if (loading) {
+  //   return (
+  //     <span>
+  //       Uncaught Error: Rendered fewer hooks than expected. This may be caused by an accidental early return statement
+  //     </span>
+  //   );
+  // }
 
   return (
     <div>
       <h1>Title:</h1>
 
-      {useList(data.titles, item => (
+      {useList(data.titles, (item) => (
         <p>{item}</p>
       ))}
+
+      {loading ? <span>Loading ...</span> : null}
 
       <div>
         <button onClick={onFetch}>view more</button>

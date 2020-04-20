@@ -12,26 +12,6 @@ With [`npm`](https://npmjs.org/):
 npm install estafette
 ```
 
-# `useList(store, renderItem)`
-
-Hook function for rendering list of data.
-Every item will be memoized and updated only when their data changes.
-
-#### Arguments
-
-1. `list` (_Array_): Data
-2. `render` (_Function_): Render function which will be called for every item in list
-
-```jsx
-<ul>
-  {useList(['a', 'b', 'c', 'd'], (item, i) => (
-    <li>
-      {i + 1}. {item}
-    </li>
-  ))}
-</ul>
-```
-
 # `useRequest(initialValues)`
 
 Hook function for fetching data.
@@ -102,7 +82,7 @@ const App = () => {
   return (
     <>
       <ul>
-        {useList(data, item => (
+        {useList(data, (item) => (
           <li>{item.title}</li>
         ))}
       </ul>
@@ -111,4 +91,38 @@ const App = () => {
     </>
   );
 };
+```
+
+# `useList(data, renderItem)`
+
+Hook function for rendering list of data.
+Every item will be memoized and updated only when their data changes.
+
+#### Arguments
+
+1. `list` (_Array_): Data
+2. `render` (_Function_): Render function which will be called for every item in list
+
+```jsx
+<ul>
+  {useList(['a', 'b', 'c', 'd'], (item, i) => (
+    <li>
+      {i + 1}. {item}
+    </li>
+  ))}
+</ul>
+```
+
+#### Use direct in JSX
+
+You can get the error `Uncaught Error: Rendered fewer hooks than expected. This may be caused by an accidental early return statement.` if you show or hide HOOK after first rendering, for this case you have to save into a variable, like this:
+
+```jsx
+const renderList = useList(['a', 'b', 'c', 'd'], (item, i) => (
+  <li>
+    {i + 1}. {item}
+  </li>
+));
+
+return <ul>{renderlist}</ul>;
 ```
