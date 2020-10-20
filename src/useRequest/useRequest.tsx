@@ -62,10 +62,15 @@ export function useRequest<T>(options?: Options): RequestResponse<T> {
 
       return Promise.resolve(response);
     } catch ({ response = {} }) {
-      setErrors(response.data);
       setLoading(false);
 
-      return Promise.reject(response.data);
+      if (response.data) {
+        setErrors(response.data);
+
+        return Promise.reject(response.data);
+      }
+
+      return Promise.reject({});
     }
   };
 
