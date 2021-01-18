@@ -21,6 +21,7 @@ interface Options {
 
 interface Params {
   concat?: boolean | string;
+  loading?: false;
 }
 
 interface RequestResponse<T> {
@@ -44,12 +45,13 @@ export function useRequest<T>(options?: Options): RequestResponse<T> {
 
   const request = async (fn: { data: T } | Promise<{ data: T }>, params?: Params): Promise<T> => {
     setErrors({});
-    setLoading(true);
+
+    if (!params || (params && params.loading !== false)) {
+      setLoading(true);
+    }
 
     try {
       const { data: response } = await fn;
-
-      setLoading(false);
 
       if (params && params.concat) {
         const concatResponse = _concat(params.concat, data, response);
@@ -62,8 +64,6 @@ export function useRequest<T>(options?: Options): RequestResponse<T> {
 
       return Promise.resolve(response);
     } catch ({ response = {} }) {
-      setLoading(false);
-
       if (response.data) {
         setErrors(response.data);
 
@@ -71,6 +71,8 @@ export function useRequest<T>(options?: Options): RequestResponse<T> {
       }
 
       return Promise.reject({});
+    } finally {
+      setLoading(false);
     }
   };
 
