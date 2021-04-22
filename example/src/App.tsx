@@ -12,6 +12,8 @@ const initialData = { titles: [] };
 export const App: React.FC = () => {
   const { request, data, loading, setData } = useRequest<{ titles: string[] }>({ data: initialData });
 
+  const [foo, setFoo] = React.useState(0);
+
   React.useEffect(() => {
     onFetch();
   }, []);
@@ -19,6 +21,8 @@ export const App: React.FC = () => {
   const onFetch = () => request(API(), { concat: data.titles.length > 0 && 'titles' });
 
   const onClear = () => setData(initialData);
+
+  const onIncreaseFoo = () => setFoo((prevFoo) => prevFoo + 1);
 
   // if (loading) {
   //   return (
@@ -32,13 +36,20 @@ export const App: React.FC = () => {
     <div>
       <h1>Title:</h1>
 
-      {useList(data.titles, (item) => (
-        <p>{item}</p>
-      ))}
+      {useList(
+        data.titles,
+        (item) => (
+          <p>
+            {item} {foo}
+          </p>
+        ),
+        [foo],
+      )}
 
       {loading ? <span>Loading ...</span> : null}
 
       <div>
+        <button onClick={onIncreaseFoo}>increase foo</button>
         <button onClick={onFetch}>view more</button>
         <button onClick={onClear}>clear all</button>
       </div>

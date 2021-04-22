@@ -6,7 +6,11 @@ function withDisplayName<T>(name: string, Component: any): T {
   return Component;
 }
 
-export function useList<T>(list: T[], renderItem: (item: T, index: number) => React.ReactNode) {
+export function useList<T>(
+  list: T[],
+  renderItem: (item: T, index: number) => React.ReactNode,
+  deps = [] as React.DependencyList,
+) {
   const fnRef = React.useRef(renderItem);
   fnRef.current = renderItem;
 
@@ -18,7 +22,7 @@ export function useList<T>(list: T[], renderItem: (item: T, index: number) => Re
     });
 
     return React.memo<any>(Item);
-  }, [list]);
+  }, [list, ...deps]);
 
   return Array.from({ length: list.length }, (_, i) =>
     React.createElement(Item, {
