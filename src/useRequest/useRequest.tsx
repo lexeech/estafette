@@ -1,20 +1,17 @@
 import { useState, Dispatch, SetStateAction } from 'react';
 
-function isArray<T>(arr: T): arr is T {
-  return Array.isArray(arr);
-}
-
-function _concat<T>(concat: boolean | string, data: T, response: T): T | undefined {
-  if (typeof data === 'object' && typeof concat === 'string') {
+type Data = { [key: string]: any } | any[];
+const _concat = (concat: boolean | string, data: Data, response: Data): any => {
+  if (typeof concat === 'string') {
     return { ...data, [concat]: [...(data[concat] || []), ...(response[concat] || [])] };
   }
 
-  if (isArray(data) && isArray(response)) {
+  if (Array.isArray(data) && Array.isArray(response)) {
     return [...data, ...response];
   }
 
-  return undefined;
-}
+  return null;
+};
 
 interface Options {
   loading?: boolean;
@@ -27,12 +24,12 @@ interface Params {
   loading?: false;
 }
 
-export interface RequestResponse<T> {
+interface RequestResponse<T> {
   request: (fn: { data: T } | Promise<{ data: T }>, params?: Params) => Promise<T>;
   data: T;
   errors: { [key: string]: any };
   loading: boolean;
-  setData: Dispatch<T>;
+  setData: Dispatch<any>;
   setErrors: Dispatch<
     SetStateAction<{
       [key: string]: string | string[];
@@ -42,7 +39,7 @@ export interface RequestResponse<T> {
 }
 
 export function useRequest<T>(options?: Options): RequestResponse<T> {
-  const [data, setData] = useState<T>((options && options.data) || []);
+  const [data, setData] = useState((options && options.data) || []);
   const [errors, setErrors] = useState<{ [key: string]: string | string[] }>((options && options.errors) || {});
   const [loading, setLoading] = useState<boolean>((options && options.loading) || false);
 
@@ -58,12 +55,9 @@ export function useRequest<T>(options?: Options): RequestResponse<T> {
 
       if (params && params.concat) {
         const concatResponse = _concat(params.concat, data, response);
+        setData(concatResponse);
 
-        if (concatResponse) {
-          setData(concatResponse);
-
-          return Promise.resolve(concatResponse);
-        }
+        return Promise.resolve(concatResponse);
       }
 
       setData(response);
