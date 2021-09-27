@@ -3,7 +3,7 @@ import { useState, Dispatch, SetStateAction } from 'react';
 type Data = { [key: string]: any } | any[];
 const _concat = (concat: boolean | string, data: Data, response: Data): any => {
   if (typeof concat === 'string') {
-    return { ...data, [concat]: [...(data[concat] || []), ...(response[concat] || [])] };
+    return { ...response, [concat]: [...(data[concat] || []), ...(response[concat] || [])] };
   }
 
   if (Array.isArray(data) && Array.isArray(response)) {
