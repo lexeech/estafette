@@ -74,7 +74,7 @@ const App = () => {
   const { request, data, loading } = useRequest();
 
   useEffect(() => {
-    request(axios.get('https://jsonplaceholder.typicode.com/posts', { concat: page > 1 }));
+    request(axios.get('https://jsonplaceholder.typicode.com/posts'), { concat: page > 1 });
   }, [page]);
 
   const onChangePage = () => setPage(page + 1);
