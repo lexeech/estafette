@@ -6,7 +6,7 @@ node_modules
 
 # builds
 build
-dist
+lib
 .rpt2_cache
 
 # misc
@@ -20,4 +20,3 @@ dist
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-yarn.lock

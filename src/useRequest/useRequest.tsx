@@ -1,19 +1,7 @@
 import { useState, Dispatch, SetStateAction } from 'react';
+import { concatData } from 'libs/concatData';
 
-type Data = { [key: string]: any } | any[];
-const _concat = (concat: boolean | string, data: Data, response: Data): any => {
-  if (typeof concat === 'string') {
-    return { ...response, [concat]: [...(data[concat] || []), ...(response[concat] || [])] };
-  }
-
-  if (Array.isArray(data) && Array.isArray(response)) {
-    return [...data, ...response];
-  }
-
-  return null;
-};
-
-interface Options {
+interface RequestOptions {
   loading?: boolean;
   data?: any;
   errors?: any;
@@ -24,7 +12,7 @@ interface Params {
   loading?: false;
 }
 
-interface RequestResponse<T> {
+interface RequestReturn<T> {
   request: (fn: { data: T } | Promise<{ data: T }>, params?: Params) => Promise<T>;
   data: T;
   errors: { [key: string]: any };
@@ -38,10 +26,10 @@ interface RequestResponse<T> {
   setLoading: Dispatch<SetStateAction<boolean>>;
 }
 
-export function useRequest<T>(options?: Options): RequestResponse<T> {
-  const [data, setData] = useState((options && options.data) || []);
-  const [errors, setErrors] = useState<{ [key: string]: string | string[] }>((options && options.errors) || {});
-  const [loading, setLoading] = useState<boolean>((options && options.loading) || false);
+export function useRequest<T>(options: RequestOptions): RequestReturn<T> {
+  const [data, setData] = useState<T>(options?.data || []);
+  const [errors, setErrors] = useState<{ [key: string]: string | string[] }>(options?.errors || {});
+  const [loading, setLoading] = useState<boolean>(options?.loading || false);
 
   const request = async (fn: { data: T } | Promise<{ data: T }>, params?: Params): Promise<T> => {
     setErrors({});
@@ -54,7 +42,8 @@ export function useRequest<T>(options?: Options): RequestResponse<T> {
       const { data: response } = await fn;
 
       if (params && params.concat) {
-        const concatResponse = _concat(params.concat, data, response);
+        const concatResponse = concatData(params.concat, data, response);
+
         setData(concatResponse);
 
         return Promise.resolve(concatResponse);
