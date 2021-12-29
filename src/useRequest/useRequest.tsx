@@ -10,7 +10,7 @@ const _concat = (concat: boolean | string, data: Data, response: Data): any => {
     return [...data, ...response];
   }
 
-  return null;
+  return response;
 };
 
 interface Options {
@@ -54,10 +54,15 @@ export function useRequest<T>(options?: Options): RequestResponse<T> {
       const { data: response } = await fn;
 
       if (params && params.concat) {
-        const concatResponse = _concat(params.concat, data, response);
-        setData(concatResponse);
+        let newData: T = response;
 
-        return Promise.resolve(concatResponse);
+        setData((prevState: Data) => {
+          newData = _concat(params.concat!, prevState, response);
+
+          return newData;
+        });
+
+        return Promise.resolve(newData);
       }
 
       setData(response);
