@@ -54,9 +54,13 @@ export function useRequest<T>(options?: Options): RequestResponse<T> {
       const { data: response } = await fn;
 
       if (params && params.concat) {
-        setData((prevState: Options) => _concat(params.concat!, prevState, response));
+        let newData: T;
+        setData((prevState: Options) => {
+          newData = _concat(params.concat!, prevState, response);
+          return newData;
+        });
 
-        return response;
+        return newData!;
       }
 
       setData(response);
