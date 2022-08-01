@@ -1,4 +1,4 @@
-import { useState, Dispatch, SetStateAction } from 'react';
+import { useCallback, useState, Dispatch, SetStateAction } from 'react';
 
 type Data = { [key: string]: any } | any[];
 const _concat = (concat: boolean | string, data: Data, response: Data): any => {
@@ -43,7 +43,7 @@ export function useRequest<T>(options?: Options): RequestResponse<T> {
   const [errors, setErrors] = useState<{ [key: string]: string | string[] }>((options && options.errors) || {});
   const [loading, setLoading] = useState<boolean>((options && options.loading) || false);
 
-  const request = async (fn: { data: T } | Promise<{ data: T }>, params?: Params): Promise<T> => {
+  const request = useCallback(async (fn: { data: T } | Promise<{ data: T }>, params?: Params): Promise<T> => {
     setErrors({});
 
     if (!params || (params && params.loading !== false)) {
@@ -79,7 +79,9 @@ export function useRequest<T>(options?: Options): RequestResponse<T> {
     } finally {
       setLoading(false);
     }
-  };
+
+    /** no deps necessary */
+  }, []);
 
   return {
     request,
