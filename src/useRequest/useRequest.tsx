@@ -65,11 +65,11 @@ export function useRequest<T>(options?: Options): RequestResponse<T> {
   const [loading, setLoading] = useState<boolean>((options && options.loading) || false);
 
   const request = useCallback(async (fn: { data: T } | Promise<{ data: T }>, params?: Params): Promise<T> => {
-    if (params?.resetErrors !== false) {
+    if (params && params.resetErrors !== false) {
       setErrors({});
     }
 
-    if (params?.toggleLoading !== false || params?.loading !== false) {
+    if (params && (params.toggleLoading !== false || params.loading !== false)) {
       setLoading(true);
     }
 
