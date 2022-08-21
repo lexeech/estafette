@@ -20,8 +20,29 @@ interface Options {
 }
 
 interface Params {
+  /**
+   * Concats data with previous one.
+   * Pass a string to concat a certain proprety of object with.
+   */
   concat?: boolean | string;
-  loading?: false;
+
+  /**
+   * @default true
+   * Toggles loading states before making request.
+   */
+  toggleLoading?: boolean;
+
+  /**
+   * @default true
+   * Resets errors state before making request
+   */
+  resetErrors?: boolean;
+
+  /**
+   * @deprecated
+   * Has been deprecated in favor of resetLoading prop.
+   * */
+  loading?: boolean;
 }
 
 interface RequestResponse<T> {
@@ -44,9 +65,11 @@ export function useRequest<T>(options?: Options): RequestResponse<T> {
   const [loading, setLoading] = useState<boolean>((options && options.loading) || false);
 
   const request = useCallback(async (fn: { data: T } | Promise<{ data: T }>, params?: Params): Promise<T> => {
-    setErrors({});
+    if (params?.resetErrors !== false) {
+      setErrors({});
+    }
 
-    if (!params || (params && params.loading !== false)) {
+    if (params?.toggleLoading !== false || params?.loading !== false) {
       setLoading(true);
     }
 

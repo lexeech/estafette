@@ -93,6 +93,38 @@ const App = () => {
 };
 ```
 
+# Skip loading or errors steps in `request(data, params)`
+
+In the code bellow with additional parameters for request function we can switch off loading toggle and prevent errors reseting.
+Can be useful for seamless loading or for keeping validation errors in a form.
+
+```jsx
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useList, useRequest } from 'estafette';
+
+const App = () => {
+  const [page, setPage] = useState(1);
+  const { request, data, loading } = useRequest();
+
+  useEffect(() => {
+    request(axios.get('https://jsonplaceholder.typicode.com/posts'), { toggleLoading: false, resetErrors: false });
+  }, [page]);
+
+  return (
+    <>
+      <span>{errors.details}</span>
+
+      <ul>
+        {useList(data, (item) => (
+          <li>{item.title}</li>
+        ))}
+      </ul>
+    </>
+  );
+};
+```
+
 # `useList(data, renderItem)`
 
 Hook function for rendering list of data.
