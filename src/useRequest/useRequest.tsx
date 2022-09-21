@@ -64,47 +64,53 @@ export function useRequest<T>(options?: Options): RequestResponse<T> {
   const [errors, setErrors] = useState<{ [key: string]: string | string[] }>((options && options.errors) || {});
   const [loading, setLoading] = useState<boolean>((options && options.loading) || false);
 
-  const request = useCallback(async (fn: { data: T } | Promise<{ data: T }>, params?: Params): Promise<T> => {
-    if (params && params.resetErrors !== false) {
-      setErrors({});
-    }
-
-    if (params && (params.toggleLoading !== false || params.loading !== false)) {
-      setLoading(true);
-    }
-
-    try {
-      const { data: response } = await fn;
-
-      if (params && params.concat) {
-        let newData = response;
-
-        setData((prevState: Data) => {
-          newData = _concat(params.concat!, prevState, response as Data);
-
-          return newData;
-        });
-
-        return Promise.resolve(newData);
+  const request = useCallback(
+    async (
+      fn: { data: T } | Promise<{ data: T }>,
+      { resetErrors = true, toggleLoading = true, loading = true, concat }: Params = {},
+    ): Promise<T> => {
+      if (resetErrors === true) {
+        setErrors({});
       }
 
-      setData(response);
-
-      return Promise.resolve(response);
-    } catch ({ response = {} }) {
-      if (response.data) {
-        setErrors(response.data);
-
-        return Promise.reject(response.data);
+      if (toggleLoading === true && loading === true) {
+        setLoading(true);
       }
 
-      return Promise.reject({});
-    } finally {
-      setLoading(false);
-    }
+      try {
+        const { data: response } = await fn;
 
-    /** no deps necessary */
-  }, []);
+        if (concat) {
+          let newData = response;
+
+          setData((prevState: Data) => {
+            newData = _concat(concat!, prevState, response as Data);
+
+            return newData;
+          });
+
+          return Promise.resolve(newData);
+        }
+
+        setData(response);
+
+        return Promise.resolve(response);
+      } catch ({ response = {} }) {
+        if (response.data) {
+          setErrors(response.data);
+
+          return Promise.reject(response.data);
+        }
+
+        return Promise.reject({});
+      } finally {
+        setLoading(false);
+      }
+
+      /** no deps necessary */
+    },
+    [],
+  );
 
   return {
     request,
